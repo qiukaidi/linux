@@ -53,6 +53,7 @@
 #include <linux/can/error.h>
 #include <linux/can/led.h>
 #include <linux/clk.h>
+#include <linux/reset.h>
 #include <linux/delay.h>
 #include <linux/interrupt.h>
 #include <linux/init.h>
@@ -204,6 +205,7 @@ struct sun4ican_priv {
 	struct can_priv can;
 	void __iomem *base;
 	struct clk *clk;
+	struct reset_control *reset;
 	spinlock_t cmdreg_lock;	/* lock for concurrent cmd register writes */
 };
 
@@ -709,6 +711,13 @@ static int sun4ican_open(struct net_device *dev)
 		goto exit_clock;
 	}
 
+	/* software reset deassert */
+	err = reset_control_deassert(priv->reset);
+	if (err) {
+		netdev_err(dev, "could not deassert CAN reset\n");
+		goto exit_soft_reset;
+	}
+
 	err = sun4i_can_start(dev);
 	if (err) {
 		netdev_err(dev, "could not start CAN peripheral\n");
@@ -721,6 +730,8 @@ static int sun4ican_open(struct net_device *dev)
 	return 0;
 
 exit_can_start:
+	reset_control_assert(priv->reset);
+exit_soft_reset:
 	clk_disable_unprepare(priv->clk);
 exit_clock:
 	free_irq(dev->irq, dev);
@@ -735,6 +746,7 @@ static int sun4ican_close(struct net_device *dev)
 
 	netif_stop_queue(dev);
 	sun4i_can_stop(dev);
+	reset_control_assert(priv->reset);
 	clk_disable_unprepare(priv->clk);
 
 	free_irq(dev->irq, dev);
@@ -771,6 +783,7 @@ static int sun4ican_probe(struct platform_device *pdev)
 {
 	struct device_node *np = pdev->dev.of_node;
 	struct clk *clk;
+	struct reset_control* reset;
 	void __iomem *addr;
 	int err, irq;
 	struct net_device *dev;
@@ -779,6 +792,13 @@ static int sun4ican_probe(struct platform_device *pdev)
 	clk = of_clk_get(np, 0);
 	if (IS_ERR(clk)) {
 		dev_err(&pdev->dev, "unable to request clock\n");
+		err = -ENODEV;
+		goto exit;
+	}
+
+	reset = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
+	if (IS_ERR(reset)) {
+		dev_err(&pdev->dev, "unable to request reset\n");
 		err = -ENODEV;
 		goto exit;
 	}
@@ -818,6 +838,7 @@ static int sun4ican_probe(struct platform_device *pdev)
 				       CAN_CTRLMODE_3_SAMPLES;
 	priv->base = addr;
 	priv->clk = clk;
+	priv->reset = reset;
 	spin_lock_init(&priv->cmdreg_lock);
 
 	platform_set_drvdata(pdev, dev);

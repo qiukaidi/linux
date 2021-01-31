@@ -712,6 +712,12 @@ static void sunxi_pmx_set(struct pinctrl_dev *pctldev,
 	writel((val & ~mask) | config << sunxi_mux_offset(pin),
 		pctl->membase + sunxi_mux_reg(pin));
 
+	// printk("sunxi_pmx_set pin=%d config=%d addr=%x val=%x\n", 
+	// 	pin, config, 
+	// 	pctl->membase + sunxi_mux_reg(pin),
+	// 	(val & ~mask) | config << sunxi_mux_offset(pin)
+	// );
+
 	raw_spin_unlock_irqrestore(&pctl->lock, flags);
 }
 
@@ -729,7 +735,7 @@ static int sunxi_pmx_set_mux(struct pinctrl_dev *pctldev,
 
 	if (!desc)
 		return -EINVAL;
-
+	// printk("sunxi_pmx_set_mux %s %s %d %d\n", g->name, func->name, g->pin, desc->muxval);
 	sunxi_pmx_set(pctldev, g->pin, desc->muxval);
 
 	return 0;

@@ -73,20 +73,14 @@
 	leds {
 		compatible = "gpio-leds";
 
-		pwr-led {
-			label = "bananapi:red:pwr";
-			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>;
-			default-state = "on";
-		};
-
 		user-led-green {
 			label = "bananapi:green:user";
-			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 7 1 GPIO_ACTIVE_HIGH>;
 		};
 
 		user-led-blue {
 			label = "bananapi:blue:user";
-			gpios = <&pio 7 22 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 7 17 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -124,6 +118,10 @@
 &ehci2 {
 	status = "okay";
 };
+
+// &ehci0 {
+// 	status = "disabled";
+// };
 
 &gmac {
 	pinctrl-names = "default";
@@ -193,6 +191,10 @@
 	non-removable;
 	status = "okay";
 };
+
+// &ohci0 {
+// 	status = "disabled";
+// };
 
 &ohci1 {
 	status = "okay";
@@ -331,5 +333,18 @@
 &usbphy {
 	usb1_vbus-supply = <&reg_vcc5v0>;
 	usb2_vbus-supply = <&reg_vcc5v0>;
+	status = "okay";
+
+	// usb0_id_det-gpios = <&pio 7 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH10 */
+
+};
+
+&can0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&can0_pins>;
+};
+
+&usb_otg{
 	status = "okay";
 };
