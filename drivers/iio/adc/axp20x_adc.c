@@ -253,17 +253,7 @@ static int axp22x_adc_raw(struct iio_dev *indio_dev,
 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
 	int size;
 
-	/*
-	 * N.B.: Unlike the Chinese datasheets tell, the charging current is
-	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
-	 * bits.
-	 */
-	if (chan->type == IIO_CURRENT && chan->channel == AXP22X_BATT_DISCHRG_I)
-		size = 13;
-	else
-		size = 12;
-
-	*val = axp20x_read_variable_width(info->regmap, chan->address, size);
+	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
 	if (*val < 0)
 		return *val;
 
@@ -387,7 +377,7 @@ static int axp22x_adc_scale(struct iio_chan_spec const *chan, int *val,
 
 	case IIO_CURRENT:
 		*val = 0;
-		*val2 = 500000;
+		*val2 = 1000000;
 		return IIO_VAL_INT_PLUS_MICRO;
 
 	case IIO_TEMP:
