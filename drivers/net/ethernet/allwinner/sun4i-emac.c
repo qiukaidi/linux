@@ -86,7 +86,7 @@ struct emac_board_info {
 	unsigned int		link;
 	unsigned int		speed;
 	unsigned int		duplex;
-	struct reset_control *reset;
+	struct reset_control	*reset;
 
 	phy_interface_t		phy_interface;
 };
