@@ -970,7 +970,6 @@
 		};
 
 		emac: ethernet@1c0b000 {
-			syscon = <&ccu>;
 			compatible = "allwinner,sun4i-a10-emac";
 			reg = <0x01c0b000 0x1000>;
 			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
