@@ -15,7 +15,12 @@ maintainers:
 
 properties:
   compatible:
-    const: allwinner,sun4i-a10-emac
+    oneOf:
+      - const: allwinner,sun4i-a10-emac
+      - const: allwinner,sun4i-r40-emac
+      - items:
+          - const: allwinner,sun4i-r40-emac
+          - const: allwinner,sun4i-a10-emac
 
   reg:
     maxItems: 1
@@ -29,6 +34,9 @@ properties:
   allwinner,sram:
     description: Phandle to the device SRAM
     $ref: /schemas/types.yaml#/definitions/phandle-array
+
+  resets:
+    maxItems: 1
 
 required:
   - compatible
@@ -47,6 +55,7 @@ examples:
         reg = <0x01c0b000 0x1000>;
         interrupts = <55>;
         clocks = <&ahb_gates 17>;
+        resets = <&ccu RST_BUS_EMAC>;
         phy-handle = <&phy0>;
         allwinner,sram = <&emac_sram 1>;
     };
