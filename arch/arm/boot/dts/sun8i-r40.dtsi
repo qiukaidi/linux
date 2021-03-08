@@ -976,8 +976,6 @@
 			clocks = <&ccu CLK_BUS_EMAC>;
 			resets = <&ccu RST_BUS_EMAC>;
 			allwinner,sram = <&emac_sram 1>;
-			pinctrl-names = "default";
-			pinctrl-0 = <&emac_ph_pins>;
 			status = "disabled";
 		};
 
