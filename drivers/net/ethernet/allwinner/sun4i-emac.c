@@ -802,7 +802,6 @@ static int emac_probe(struct platform_device *pdev)
 	struct net_device *ndev;
 	int ret = 0;
 	const char *mac_addr;
-	struct reset_control* reset;
 	const struct emac_quirks *quirks;
 
 	ndev = alloc_etherdev(sizeof(struct emac_board_info));
@@ -997,7 +996,7 @@ static const struct of_device_id emac_of_match[] = {
 		.data = &sun4i_a10_emac_quirks
 	},
 	{
-		.compatible = "allwinner,sun4i-a10-emac",
+		.compatible = "allwinner,sun4i-r40-emac",
 		.data = &sun4i_r40_emac_quirks
 	},
 	/* Deprecated */
