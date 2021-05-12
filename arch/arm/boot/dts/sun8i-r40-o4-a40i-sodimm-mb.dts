@@ -44,9 +44,12 @@
 
 };
 
+
+&cpu0 {
+	cpu-supply = <&reg_dcdc2>;
+};
+
 &ahci {
-	ahci-supply = <&reg_dldo4>;
-	phy-supply = <&reg_eldo3>;
 	status = "disabled";
 };
 
@@ -63,8 +66,21 @@
 };
 
 // &ehci0 {
-// 	status = "disabled";
+// 	status = "okay";
 // };
+
+
+// &ohci0 {
+// 	status = "okay";
+// };
+
+&ohci1 {
+	status = "okay";
+};
+
+&ohci2 {
+	status = "okay";
+};
 
 &gmac {
 	pinctrl-names = "default";
@@ -111,9 +127,9 @@
 
 
 
-// &hdmi {
-// 	status = "okay";
-// };
+&hdmi {
+	status = "disabled";
+};
 
 // &hdmi_out {
 // 	hdmi_out_con: endpoint {
@@ -135,7 +151,7 @@
 #include "axp22x.dtsi"
 
 &ir0 {
-	status = "okay";
+	status = "disabled";
 };
 
 &mmc0 {
@@ -164,18 +180,6 @@
 	status = "okay";
 };
 
-// &ohci0 {
-// 	status = "disabled";
-// };
-
-// &ohci1 {
-// 	status = "okay";
-// };
-
-// &ohci2 {
-// 	status = "okay";
-// };
-
 &pio {
 	pinctrl-names = "default";
 	pinctrl-0 = <&clk_out_a_pin>;
@@ -192,8 +196,16 @@
                 "PA4", "PA5", "PA6", "PA7",
                 "PA8", "PA9", "PA10", "PA11", "PA12",
                 "PA13", "PA14", "PA15";
+	drive-strength = <40>;
+
         function = "gmac";
     };
+
+    can0_pins_pa: can0-pins-pa {
+        pins = "PA16", "PA17";
+        function = "can";
+    };
+
 };
 
 &reg_aldo2 {
@@ -282,9 +294,9 @@
 	regulator-name = "vdd1v2-sata";
 };
 
-// &tcon_tv0 {
-// 	status = "okay";
-// };
+&tcon_tv0 {
+	status = "disabled";
+};
 
 &uart0 {
 	pinctrl-names = "default";
@@ -311,20 +323,20 @@
 // 	};
 // };
 
-// &usbphy {
-// 	usb1_vbus-supply = <&reg_vcc5v0>;
-// 	usb2_vbus-supply = <&reg_vcc5v0>;
-// 	status = "okay";
+&usbphy {
+	usb1_vbus-supply = <&reg_dcdc1>;
+	usb2_vbus-supply = <&reg_dcdc1>;
+	status = "okay";
 
-// 	// usb0_id_det-gpios = <&pio 7 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH10 */
+	// usb0_id_det-gpios = <&pio 7 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH10 */
 
-// };
+};
 
-// &can0 {
-// 	status = "okay";
-// 	pinctrl-names = "default";
-// 	pinctrl-0 = <&can0_pins>;
-// };
+&can0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&can0_pins_pa>;
+};
 
 // &usb_otg{
 // 	status = "okay";
@@ -333,3 +345,16 @@
 &rtp {
     status = "disabled";
 };
+
+&battery_power_supply {
+    status = "okay";
+};
+
+&ac_power_supply {
+    status = "okay";
+};
+
+&usb_power_supply {
+    status = "okay";
+};
+
