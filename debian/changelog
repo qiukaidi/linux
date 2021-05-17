@@ -1,3 +1,9 @@
+linux-wb (5.10.35-wb100) UNRELEASED; urgency=medium
+
+  * WB7 initial support
+
+ -- Evgeny Boger <boger@contactless.ru>  Mon, 17 May 2021 19:46:14 +0300
+
 linux-wb (5.10.35-wb1) stable; urgency=medium
 
   * merge linux-stable/v.5.10.y, 5.10.35
