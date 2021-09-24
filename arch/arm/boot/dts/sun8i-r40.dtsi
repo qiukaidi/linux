@@ -835,6 +835,20 @@
 				function = "uart0";
 			};
 
+			uart1_pa_pins: uart1-pa-pins {
+				pins = "PA10", "PA11";
+			};
+
+			uart2_pa_pins: uart2-pa-pins {
+				pins = "PA2", "PA3";
+				function = "uart2";
+			};
+
+			uart2_pi_pins: uart2-pi-pins {
+				pins = "PI18", "PI19";
+				function = "uart2";
+			};
+
 			uart3_pg_pins: uart3-pg-pins {
 				pins = "PG6", "PG7";
 				function = "uart3";
@@ -845,8 +859,62 @@
 				function = "uart3";
 			};
 
+			uart3_ph_pins: uart3-ph-pins {
+				pins = "PH0", "PH1";
+				function = "uart3";
+			};
+
+			uart4_pg_pins: uart4-pg-pins {
+				pins = "PG10", "PG11";
+				function = "uart4";
+			};
+
+			uart4_ph_pins: uart4-ph-pins {
+				pins = "PH4", "PH5";
+				function = "uart4";
+			};
+
+			uart5_ph_pins: uart5-ph-pins {
+				pins = "PH6", "PH7";
+				function = "uart5";
+			};
+
+			uart5_pi_pins: uart5-pi-pins {
+				pins = "PI10", "PI11";
+				function = "uart5";
+			};
+
+			uart6_pa_pins: uart6-pa-pins {
+				pins = "PA12", "PA13";
+				function = "uart6";
+			};
+
+			uart6_pi_pins: uart6-pi-pins {
+				pins = "PI12", "PI13";
+				function = "uart6";
+			};
+
+			uart7_pi_pins: uart7-pi-pins {
+				pins = "PI20", "PI21";
+				function = "uart7";
+			};
+
+			uart7_pa_pins: uart7-pa-pins {
+				pins = "PA14", "PA15";
+				function = "uart7";
+			};
+
+			pwm_ch2_pi_pins: pwm-ch2-pi-pins {
+				pins = "PI20";
+				function = "pwm";
+			};
+
 			can0_pins: can0-pins {
 				pins = "PH20", "PH21";
+				function = "can";
+			};
+			can0_pins_pa: can0-pins-pa {
+				pins = "PA16", "PA17";
 				function = "can";
 			};
 		};
