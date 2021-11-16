@@ -35,6 +35,8 @@
 #include <linux/spinlock.h>
 #include <linux/usb/of.h>
 #include <linux/workqueue.h>
+#include <linux/usb/role.h>
+#include <linux/usb/usb_phy_generic.h>
 
 #define REG_ISCR			0x00
 #define REG_PHYCTL_A10			0x04
@@ -152,6 +154,7 @@ struct sun4i_usb_phy_data {
 	int id_det;
 	int vbus_det;
 	struct delayed_work detect;
+	struct usb_role_switch *role_sw;
 };
 
 #define to_sun4i_usb_phy_data(phy) \
@@ -199,6 +202,7 @@ static void sun4i_usb_phy_write(struct sun4i_usb_phy *phy, u32 addr, u32 data,
 	unsigned long flags;
 	int i;
 
+	printk(KERN_ERR "sun4i_usb_phy_write phy=%d addr=%x data=%x len=%d\n", phy->index, addr, data, len);
 	spin_lock_irqsave(&phy_data->reg_lock, flags);
 
 	/* On older SoCs (prior to H3) PHY register are accessed by manipulating the
@@ -411,6 +415,8 @@ static int sun4i_usb_phy0_get_vbus_det(struct sun4i_usb_phy_data *data)
 	if (data->vbus_det_gpio)
 		return gpiod_get_value_cansleep(data->vbus_det_gpio);
 
+        return sun4i_usb_phy0_get_id_det(data) || data->phys[0].regulator_on;
+
 	if (data->vbus_power_supply) {
 		union power_supply_propval val;
 		int r;
@@ -456,6 +462,7 @@ static int sun4i_usb_phy_power_on(struct phy *_phy)
 	struct sun4i_usb_phy_data *data = to_sun4i_usb_phy_data(phy);
 	int ret;
 
+	printk("sun4i_usb_phy_power_on %d\n", phy->index);
 	if (!phy->vbus || phy->regulator_on)
 		return 0;
 
@@ -484,6 +491,7 @@ static int sun4i_usb_phy_power_off(struct phy *_phy)
 	struct sun4i_usb_phy *phy = phy_get_drvdata(_phy);
 	struct sun4i_usb_phy_data *data = to_sun4i_usb_phy_data(phy);
 
+	printk("sun4i_usb_phy_power_off %d\n", phy->index);
 	if (!phy->vbus || !phy->regulator_on)
 		return 0;
 
@@ -506,7 +514,7 @@ static int sun4i_usb_phy_set_mode(struct phy *_phy,
 	struct sun4i_usb_phy *phy = phy_get_drvdata(_phy);
 	struct sun4i_usb_phy_data *data = to_sun4i_usb_phy_data(phy);
 	int new_mode;
-
+        printk("sun4i_usb_phy_set_mode phy=%d mode=%d submode=%d\n",phy->index, mode,submode);
 	if (phy->index != 0) {
 		if (mode == PHY_MODE_USB_HOST)
 			return 0;
@@ -528,8 +536,8 @@ static int sun4i_usb_phy_set_mode(struct phy *_phy,
 	}
 
 	if (new_mode != data->dr_mode) {
-		dev_info(&_phy->dev, "Changing dr_mode to %d\n", new_mode);
-		data->dr_mode = new_mode;
+		dev_info(&_phy->dev, "not Changing dr_mode to %d\n", new_mode);
+		// data->dr_mode = new_mode;
 	}
 
 	data->id_det = -1; /* Force reprocessing of id */
@@ -560,6 +568,7 @@ static void sun4i_usb_phy0_reroute(struct sun4i_usb_phy_data *data, int id_det)
 {
 	u32 regval;
 
+	printk(KERN_ERR "sun4i_usb_phy0_reroute %d\n", id_det);
 	regval = readl(data->base + REG_PHY_OTGCTL);
 	if (id_det == 0) {
 		/* Host mode. Route phy0 to EHCI/OHCI */
@@ -598,6 +607,7 @@ static void sun4i_usb_phy0_id_vbus_det_scan(struct work_struct *work)
 	data->force_session_end = false;
 
 	if (id_det != data->id_det) {
+		printk("sun4i_usb_phy0_id_vbus_det_scan id change id_det=%d\n", id_det);
 		/* id-change, force session end if we've no vbus detection */
 		if (data->dr_mode == USB_DR_MODE_OTG &&
 		    !sun4i_usb_phy0_have_vbus_det(data))
@@ -614,7 +624,9 @@ static void sun4i_usb_phy0_id_vbus_det_scan(struct work_struct *work)
 		id_notify = true;
 	}
 
+
 	if (vbus_det != data->vbus_det) {
+		printk("sun4i_usb_phy0_id_vbus_det_scan vbus change vbus_det=%d\n",vbus_det);
 		sun4i_usb_phy0_set_vbus_detect(phy0, vbus_det);
 		data->vbus_det = vbus_det;
 		vbus_notify = true;
@@ -623,6 +635,7 @@ static void sun4i_usb_phy0_id_vbus_det_scan(struct work_struct *work)
 	mutex_unlock(&phy0->mutex);
 
 	if (id_notify) {
+		printk("sun4i_usb_phy0_id_vbus_det_scan vbus change 6 %d\n", id_notify);
 		extcon_set_state_sync(data->extcon, EXTCON_USB_HOST,
 					!id_det);
 		/* When leaving host mode force end the session here */
@@ -692,6 +705,7 @@ static int sun4i_usb_phy_remove(struct platform_device *pdev)
 	struct device *dev = &pdev->dev;
 	struct sun4i_usb_phy_data *data = dev_get_drvdata(dev);
 
+	usb_role_switch_unregister(data->role_sw);
 	if (data->vbus_power_nb_registered)
 		power_supply_unreg_notifier(&data->vbus_power_nb);
 	if (data->id_det_irq > 0)
@@ -709,6 +723,22 @@ static const unsigned int sun4i_usb_phy0_cable[] = {
 	EXTCON_USB_HOST,
 	EXTCON_NONE,
 };
+
+static int musb_usb_role_sx_set(struct usb_role_switch *sw, enum usb_role role)
+{
+	// return mtk_otg_switch_set(usb_role_switch_get_drvdata(sw), role);
+	printk("phy role set role=%d\n", role);
+	return 0;
+}
+
+static enum usb_role musb_usb_role_sx_get(struct usb_role_switch *sw)
+{
+	struct sun4i_usb_phy_data *data = usb_role_switch_get_drvdata(sw);
+	enum usb_role role = USB_ROLE_DEVICE;
+	printk("phy role get role=%d\n", role);
+
+	return role;
+}
 
 static int sun4i_usb_phy_probe(struct platform_device *pdev)
 {
@@ -761,8 +791,10 @@ static int sun4i_usb_phy_probe(struct platform_device *pdev)
 			return -EPROBE_DEFER;
 	}
 
-	data->dr_mode = of_usb_get_dr_mode_by_phy(np, 0);
+	// data->dr_mode = of_usb_get_dr_mode_by_phy(np, 0);
+	data->dr_mode = USB_DR_MODE_OTG;
 
+	printk(KERN_ERR "data->dr_mode = %d\n",data->dr_mode);
 	data->extcon = devm_extcon_dev_allocate(dev, sun4i_usb_phy0_cable);
 	if (IS_ERR(data->extcon)) {
 		dev_err(dev, "Couldn't allocate our extcon device\n");
@@ -885,6 +917,17 @@ static int sun4i_usb_phy_probe(struct platform_device *pdev)
 		sun4i_usb_phy_remove(pdev); /* Stop detect work */
 		return PTR_ERR(phy_provider);
 	}
+
+
+	struct usb_role_switch_desc role_sx_desc = { 0 };
+
+	role_sx_desc.set = musb_usb_role_sx_set;
+	role_sx_desc.get = musb_usb_role_sx_get;
+	role_sx_desc.fwnode = dev_fwnode(dev);
+	role_sx_desc.driver_data = data;
+	role_sx_desc.allow_userspace_control = true;
+	data->role_sw = usb_role_switch_register(dev, &role_sx_desc);
+
 
 	dev_dbg(dev, "successfully loaded\n");
 
