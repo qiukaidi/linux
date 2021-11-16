@@ -257,7 +257,6 @@ static int axp22x_adc_raw(struct iio_dev *indio_dev,
 			  struct iio_chan_spec const *chan, int *val)
 {
 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
-	int size;
 
 	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
 	if (*val < 0)
