@@ -408,9 +408,8 @@ static int axp22x_adc_scale(struct iio_chan_spec const *chan, int *val,
 		return axp22x_adc_scale_voltage(chan->channel, val, val2);
 
 	case IIO_CURRENT:
-		*val = 0;
-		*val2 = 1000000;
-		return IIO_VAL_INT_PLUS_MICRO;
+		*val = 1;
+		return IIO_VAL_INT;
 
 	case IIO_TEMP:
 		*val = 100;
