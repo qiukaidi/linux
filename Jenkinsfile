@@ -7,7 +7,7 @@ pipeline {
         booleanParam(name: 'UPLOAD_TO_POOL', defaultValue: true,
                      description: 'works only with ADD_VERSION_SUFFIX to keep staging clean')
         booleanParam(name: 'CLEAN', defaultValue: false, description: 'force cleaned on dev/* branches')
-        string(name: 'KERNEL_FLAVOUR', defaultValue: 'wb2 wb6', description: 'space-separated list')
+        string(name: 'KERNEL_FLAVOUR', defaultValue: 'wb2 wb6 wb7', description: 'space-separated list')
         string(name: 'WBDEV_IMAGE', defaultValue: '', description: 'docker image path and tag')
     }
     environment {
