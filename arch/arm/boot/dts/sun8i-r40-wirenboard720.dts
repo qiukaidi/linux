@@ -214,41 +214,25 @@
 			   in above example) with channel name as in sysfs path
 			*/
 			A1 {
-				iio-device = <&rtp>;
-				iio-channel-name = "voltage0";
-				divider-r1-ohms = <88700>;
-				divider-r2-ohms = <10000>;
-				averaging-window = <1>;
+				iio-device = <&a1_volt>;
 				decimal-places = <1>;
 				sort-order = <0>;
 			};
 
 			A2 {
-				iio-device = <&rtp>;
-				iio-channel-name = "voltage3";
-				divider-r1-ohms = <88700>;
-				divider-r2-ohms = <10000>;
-				averaging-window = <1>;
+				iio-device = <&a2_volt>;
 				decimal-places = <1>;
 				sort-order = <1>;
 			};
 
 			A3 {
-				iio-device = <&rtp>;
-				iio-channel-name = "voltage2";
-				divider-r1-ohms = <88700>;
-				divider-r2-ohms = <10000>;
-				averaging-window = <1>;
+				iio-device = <&a3_volt>;
 				decimal-places = <1>;
 				sort-order = <2>;
 			};
 
 			Vin {
-				iio-device = <&rtp>;
-				iio-channel-name = "voltage1";
-				divider-r1-ohms = <200000>;
-				divider-r2-ohms = <12000>;
-				averaging-window = <1>;
+				iio-device = <&vin_volt>;
 				decimal-places = <1>;
 				sort-order = <3>;
 			};
@@ -435,8 +419,42 @@
 		monitored-battery = <&wbmz4_edlc>;
 	};
 
-};
+	a1_volt: a1-volt {
+		compatible = "voltage-divider";
+		io-channels = <&gpadc 0 0>;
+		#io-channel-cells = <1>;
 
+		output-ohms = <2700>;
+		full-ohms = <24700>;
+		status = "okay";
+	};
+
+	a2_volt: a2-volt {
+		compatible = "voltage-divider";
+		io-channels = <&gpadc 3>;
+		#io-channel-cells = <1>;
+
+		output-ohms = <2700>;
+		full-ohms = <24700>;
+	};
+	a3_volt: a3-volt {
+		compatible = "voltage-divider";
+		io-channels = <&gpadc 2>;
+		#io-channel-cells = <1>;
+
+		output-ohms = <2700>;
+		full-ohms = <24700>;
+	};
+
+	vin_volt: vin-volt {
+		compatible = "voltage-divider";
+		io-channels = <&gpadc 1>;
+		#io-channel-cells = <1>;
+
+		output-ohms = <2700>;
+		full-ohms = <49700>;
+	};
+};
 
 /* WBIO I2C */
 &i2c1 {
@@ -943,5 +961,13 @@
 };
 
 &pwm {
+	status = "okay";
+};
+
+&rtp {
+	status = "okay";
+};
+
+&gpadc {
 	status = "okay";
 };
