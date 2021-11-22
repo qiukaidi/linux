@@ -279,7 +279,7 @@
 				sort-order = <2>;
 			};
 
-			A4_OUT {
+			D1_OUT {
 				io-gpios = <PIN_PD 10 GPIO_ACTIVE_HIGH>;
 				gpio-xlate-type = "bank_pin";
 				gpio-pins-per-bank = <32>;
@@ -311,7 +311,7 @@
 				sort-order = <6>;
 			};
 
-			A4_IN {
+			D1_IN {
 				io-gpios = <PIN_PH 4 GPIO_ACTIVE_LOW>;
 				gpio-xlate-type = "bank_pin";
 				gpio-pins-per-bank = <32>;
@@ -508,7 +508,7 @@
 		/* PD */
 		"LVDS D0 P", "LVDS D0 N", "LVDS D1 P", "LVDS D1 N", /*  0 - 3 */
 		"LVDS D2 P", "LVDS D2 N", "LVDS DCK P", "LVDS DCK N", /*  4 - 7 */
-		"LVDS D3 P", "LVDS D3 N", "A4 OUT", "A3 OUT", /*  8 - 11 */
+		"LVDS D3 P", "LVDS D3 N", "D1 OUT", "A3 OUT", /*  8 - 11 */
 		"A2 OUT", "A1 OUT", "Pushbutton", "[NC]", /* 12 - 15 */
 		"[NC]", "[NC]", "[NC]", "WBMZ Status", /* 16 - 19 */
 		"USB0 ID", "Watchdog out", "[NC]", "[NC]", /* 20 - 23 */
@@ -543,7 +543,7 @@
 		"", "", "", "", /* 28 - 31 */
 		/* PH PH0-PH21 interrupts*/
 		"MOD4 TX", "MOD4 RX", "W1", "A3 IN", /*  0 - 3 */
-		"A4 IN", "CAN/UART RX ALT", "A2 IN", "A1 IN", //*  4 - 7 */
+		"D1 IN", "CAN/UART RX ALT", "A2 IN", "A1 IN", //*  4 - 7 */
 		"SoM Eth0 RXD3", "SoM Eth0 RXD2", "SoM Eth0 RXD1", "SoM Eth0 RXD0", /*  8 - 11 */
 		"SoM Eth0 RST", "Eth1 RST", "SoM Eth0 TXD3", "SoM Eth0 TXD2", /* 12 - 15 */
 		"SoM Eth0 TXD1", "SoM Eth0 TXD0", "SoM Eth0 RXCK", "SoM Eth0 RXERR", /* 16 - 19 */
