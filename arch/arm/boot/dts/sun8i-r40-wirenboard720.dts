@@ -161,7 +161,7 @@
 		sda-gpios = <PIN_PB 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 		scl-gpios = <PIN_PB 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 
-		i2c-gpio,delay-us = <50>;        /* ~20 kHz */
+		i2c-gpio,delay-us = <10>;        /* ~100 kHz */
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&i2c_eeprom1_pins>;
@@ -190,7 +190,7 @@
 		sda-gpios = <PIN_PB 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 		scl-gpios = <PIN_PB 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 
-		i2c-gpio,delay-us = <50>;        /* ~20 kHz */
+		i2c-gpio,delay-us = <10>;        /* ~100 kHz */
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&i2c_eeprom2_pins>;
