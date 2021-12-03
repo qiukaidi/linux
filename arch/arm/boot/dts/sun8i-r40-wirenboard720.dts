@@ -116,7 +116,6 @@
 
 	leds-gpio {
 		compatible = "gpio-leds";
-		pinctrl-0 = <&mod3_test_pins>;
 		pinctrl-names = "default";
 
 		green {
@@ -603,17 +602,108 @@
 		bias-pull-up;
 	};
 
-	mod3_test_pins: mod3-test-pins {
-		pins = "PI10", "PI11";
-		function = "irq";
-		bias-pull-up;
-	};
 	uart4_uartcan_pins: uart4-uartcan-pins {
 		pins = "PG10", "PH5";
 		function = "uart4";
 	};
 
+	/* MOD1 */
+	pinctrl_mod1_i2c_gpio: mod1-txrx-i2c-pi-pins {
+		pins = "PI20", "PI21";
+		function = "gpio_in";
+		bias-pull-up;
+	};
 
+	pinctrl_mod1_txrx_gpio: mod1-txrx-gpio-pi-pins {
+		pins = "PI20", "PI21";
+		function = "gpio_in";
+	};
+
+	pinctrl_mod1_txrx_uart: mod1-txrx-uart-pi-pins {
+		pins = "PI20", "PI21";
+		function = "uart7";
+	};
+
+	pinctrl_mod1_de_gpio: mod1-de-gpio-pb-pin {
+		pins = "PB4";
+		function = "gpio_in";
+	};
+
+	/* MOD2 */
+	pinctrl_mod2_i2c_gpio: mod2-txrx-i2c-pi-pins {
+		pins = "PI12", "PI13";
+		function = "gpio_in";
+		bias-pull-up;
+	};
+
+	pinctrl_mod2_txrx_gpio: mod2-txrx-gpio-pi-pins {
+		pins = "PI12", "PI13";
+		function = "gpio_in";
+	};
+
+	pinctrl_mod2_txrx_uart: mod2-txrx-uart-pi-pins {
+		pins = "PI12", "PI13";
+		function = "uart6";
+	};
+
+	pinctrl_mod2_de_gpio: mod2-de-gpio-pb-pin {
+		pins = "PC20";
+		function = "gpio_in";
+	};
+
+	/* MOD3 */
+	pinctrl_mod3_i2c_gpio: mod3-txrx-i2c-pi-pins {
+		pins = "PI10", "PI11";
+		function = "gpio_in";
+		bias-pull-up;
+	};
+
+	pinctrl_mod3_txrx_gpio: mod3-txrx-gpio-pi-pins {
+		pins = "PI10", "PI11";
+		function = "gpio_in";
+	};
+
+	pinctrl_mod3_txrx_uart: mod3-txrx-uart-pi-pins {
+		pins = "PI10", "PI11";
+		function = "uart5";
+	};
+
+	pinctrl_mod3_de_gpio: mod3-de-gpio-pb-pin {
+		pins = "PE10";
+		function = "gpio_in";
+	};
+
+	/* MOD4 */
+	pinctrl_mod4_i2c_gpio: mod4-txrx-i2c-pi-pins {
+		pins = "PH0", "PH1";
+		function = "gpio_in";
+		bias-pull-up;
+	};
+
+	pinctrl_mod4_txrx_gpio: mod4-txrx-gpio-pi-pins {
+		pins = "PH0", "PH1";
+		function = "gpio_in";
+	};
+
+	pinctrl_mod4_txrx_uart: mod4-txrx-uart-pi-pins {
+		pins = "PH0", "PH1";
+		function = "uart3";
+	};
+
+	pinctrl_mod4_de_gpio: mod4-de-gpio-pb-pin {
+		pins = "PI14";
+		function = "gpio_in";
+	};
+
+	pinctrl_mod4_spi_gpio: mod4-spi-gpio-pc-pins {
+		pins = "PC0", "PC1", "PC2", "PC23";
+		function = "gpio_in";
+	};
+
+	pinctrl_mod4_spi_spi: mod4-spi-spi-pc-pins {
+		pins = "PC0", "PC1", "PC2", "PC23";
+		function = "spi0";
+	};
 };
 
 &cpu0 {
