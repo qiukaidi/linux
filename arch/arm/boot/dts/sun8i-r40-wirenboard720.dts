@@ -95,7 +95,7 @@
 	/* Enable 1-wire network on terminal block W1 */
 	onewire_w1: onewire_w1 {
 		compatible = "w1-gpio";
-		gpios = <PIN_PH 2 GPIO_ACTIVE_HIGH>;
+		gpios = <PIN_PH 2 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 		pu-gpios = <PIN_PB 13 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
@@ -103,7 +103,7 @@
 	/* Enable 1-wire network on terminal block W2 */
 	onewire_w2: onewire_w2 {
 		compatible = "w1-gpio";
-		gpios = <PIN_PI 15 GPIO_ACTIVE_HIGH>;
+		gpios = <PIN_PI 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 		pu-gpios = <PIN_PE 3 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
@@ -159,10 +159,8 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		gpios = <
-			PIN_PB 16 0 /* sda */
-			PIN_PB 17 0 /* scl */
-		>;
+		sda-gpios = <PIN_PB 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+		scl-gpios = <PIN_PB 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 
 		i2c-gpio,delay-us = <50>;        /* ~20 kHz */
 
@@ -183,10 +181,8 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		gpios = <
-			PIN_PB 14 0 /* sda */
-			PIN_PB 15 0 /* scl */
-		>;
+		sda-gpios = <PIN_PB 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+		scl-gpios = <PIN_PB 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 
 		i2c-gpio,delay-us = <50>;        /* ~20 kHz */
 
