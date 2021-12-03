@@ -912,13 +912,7 @@
 	status = "okay";
 };
 
-&uart3 { /* MOD4 */
-	pinctrl-0 = <&uart3_pg_pins>;
-	pinctrl-names = "default";
-	status = "okay";
-};
-
-&uart4 { /* RS-485-1 */
+&uart4 { /* RS-485-2 */
 /*	pinctrl-0 = <&uart4_pg_pins>;*/
 	pinctrl-0 = <&uart4_uartcan_pins>;
 	pinctrl-names = "default";
@@ -929,17 +923,33 @@
 
 };
 
+&uart7 { /* MOD1 */
+	pinctrl-0 = <&uart7_pi_pins>;
+	pinctrl-names = "default";
+	      cts-override;
+	status = "disabled";
+};
+
 &uart6 { /* MOD2 */
+	pinctrl-0 = <&uart6_pi_pins>;
+	pinctrl-names = "default";
+
+	cts-override;
 	status = "disabled";
 };
 
 &uart5 { /* MOD3 */
+	pinctrl-0 = <&uart5_pi_pins>;
+	pinctrl-names = "default";
+
+	cts-override;
 	status = "disabled";
 };
 
-&uart7 { /* MOD1 */
-	pinctrl-0 = <&uart7_pi_pins>;
+&uart3 { /* MOD4 */
+	pinctrl-0 = <&uart3_ph_pins>;
 	pinctrl-names = "default";
+	cts-override;
 	status = "disabled";
 };
 
