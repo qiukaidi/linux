@@ -32,9 +32,6 @@
 		mmc1 = &mmc0;
 		rtc0 = &ext_rtc;
 		rtc1 = &rtc;
-
-
-		uart-mod4 = &uart7;
 	};
 
 	chosen {
