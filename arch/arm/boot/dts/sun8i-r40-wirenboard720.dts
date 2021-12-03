@@ -171,6 +171,13 @@
 		eeprom@50 {
 			compatible = "atmel,24c02";
 			reg = <0x50>;
+
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			eth0_mac_address: mac@80 {
+				reg = <0xfa 0x6>;
+			};
 		};
 	};
 
@@ -193,6 +200,14 @@
 		eeprom@50 {
 			compatible = "atmel,24c02";
 			reg = <0x50>;
+
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			/* To make it work make sure local-mac-address property is not set by U-Boot */
+			eth1_mac_address: mac@80 {
+				reg = <0xfa 0x6>;
+			};
 		};
 	};
 
@@ -757,6 +772,10 @@
 	phy-mode = "mii";
 	phy-supply = <&reg_dcdc1>;
 	status = "okay";
+
+	/* To make it work make sure local-mac-address property is not set by U-Boot */
+	nvmem-cells = <&eth0_mac_address>;
+	nvmem-cell-names = "mac-address";
 };
 
 
@@ -778,6 +797,10 @@
 	phy-handle = <&phy2>;
 	phy-mode = "mii";
 	phy-supply = <&reg_dcdc1>;
+
+	nvmem-cells = <&eth1_mac_address>;
+	nvmem-cell-names = "mac-address";
+
 	status = "okay";
 };
 
