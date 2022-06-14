@@ -203,19 +203,18 @@ static int sun4i_prepare_for_irq(struct iio_dev *indio_dev, int channel,
 				   info->data->tp_adc_select |
 				   info->data->adc_chan_select(channel));
 
-		ret = regmap_write(info->regmap, SUN4I_GPADC_INT_FIFOC,
-				SUN4I_GPADC_INT_FIFOC_TP_FIFO_TRIG_LEVEL(1) |
-				SUN4I_GPADC_INT_FIFOC_TP_FIFO_FLUSH);
-		if (ret)
-			return ret;
-
 		/*
 		 * When the IP changes channel, it needs a bit of time to get
 		 * correct values.
 		 */
-		// if ((reg & info->data->adc_chan_mask) !=
-		// 	 info->data->adc_chan_select(channel))
-		// 	 usleep_range(10000, 20000);
+		if ((reg & info->data->adc_chan_mask) !=
+			 info->data->adc_chan_select(channel)) {
+				ret = regmap_write(info->regmap, SUN4I_GPADC_INT_FIFOC,
+						SUN4I_GPADC_INT_FIFOC_TP_FIFO_TRIG_LEVEL(1) |
+						SUN4I_GPADC_INT_FIFOC_TP_FIFO_FLUSH);
+				if (ret)
+					return ret;
+			 }
 
 	} else {
 		/*
