@@ -214,6 +214,7 @@ static int sun4i_prepare_for_irq(struct iio_dev *indio_dev, int channel,
 						SUN4I_GPADC_INT_FIFOC_TP_FIFO_FLUSH);
 				if (ret)
 					return ret;
+				usleep_range(10000, 20000);
 			 }
 
 	} else {
